@@ -12,8 +12,6 @@ namespace ESGI.DesignPattern.Projet
         IList<Payment> _payments = new List<Payment>();
         private DateTime? _today = DateTime.Now;
         private DateTime _start;
-        private long MILLIS_PER_DAY = 86400000;
-        private long DAYS_PER_YEAR = 365;
         private double _riskRating;
         private double _unusedPercentage;
         private CapitalStrategy _capitalStrategy;
@@ -24,7 +22,8 @@ namespace ESGI.DesignPattern.Projet
                     DateTime? maturity,
                     int riskRating,
                     CapitalStrategy capitalStrategy,
-                    double unusedPercentage)
+                    double unusedPercentage,
+                    double _outstanding)
         {
             this._expiry = expiry;
             this._commitment = commitment;
@@ -35,6 +34,7 @@ namespace ESGI.DesignPattern.Projet
             this._unusedPercentage = 1.0;
             this._capitalStrategy = capitalStrategy;
             this._unusedPercentage = unusedPercentage;
+            this._outstanding = _outstanding;
         }
 
         public static Loan NewTermLoan(double commitment, DateTime start, DateTime maturity, int riskRating)
@@ -84,14 +84,9 @@ namespace ESGI.DesignPattern.Projet
             return _commitment;
         }
 
-        public DateTime? GetMaturity()
+        public double GetOutStanding()
         {
-            return _maturity;
-        }
-
-        public double GetRiskRating()
-        {
-            return _riskRating;
+            return _outstanding;
         }
 
         public void Payment(double amount, DateTime paymentDate)
@@ -99,10 +94,6 @@ namespace ESGI.DesignPattern.Projet
             _payments.Add(new Payment(amount, paymentDate));
         }
 
-        public double Capital()
-        {
-            return _capitalStrategy.Capital(this);
-        }
 
         public DateTime? GetToday()
         {
@@ -122,11 +113,6 @@ namespace ESGI.DesignPattern.Projet
         public double GetUnusedPercentage()
         {
             return _unusedPercentage;
-        }
-
-        public void SetUnusedPercentage(double unusedPercentage)
-        {
-            _unusedPercentage = unusedPercentage;
         }
 
         public double UnusedRiskAmount()

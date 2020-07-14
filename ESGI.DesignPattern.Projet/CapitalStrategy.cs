@@ -4,19 +4,21 @@ namespace ESGI.DesignPattern.Projet
     public abstract class CapitalStrategy
     {
 
-        private long MILLIS_PER_DAY = 86400000;
-        private long DAYS_PER_YEAR = 365;
+        private const long MILLIS_PER_DAY = 86400000;
+        private const long DAYS_PER_YEAR = 365;
+        private const double riskRating = 0.03;
+        private const double unusedRiskRating = 0.01;
 
         public abstract double Capital(Loan loan);
 
-        protected double RiskFactorFor(Loan loan)
+        protected double RiskFactorFor()
         {
-            return RiskFactor.GetFactors().ForRating(loan.GetRiskRating());
+            return riskRating;
         }
 
-        private double UnusedRiskFactorFor(Loan loan)
+        protected double UnusedRiskFactorFor()
         {
-            return UnusedRiskFactors.GetFactors().ForRating(loan.GetRiskRating());
+            return unusedRiskRating;
         }
 
         public virtual double Duration(Loan loan)
@@ -26,7 +28,7 @@ namespace ESGI.DesignPattern.Projet
 
         protected double YearsTo(DateTime? endDate, Loan loan)
         {
-            DateTime? beginDate = (loan.GetToday() == null ? loan.GetStart() : loan.GetToday());
+            DateTime? beginDate = (loan.GetToday().HasValue ? loan.GetToday() : loan.GetStart());
             return (double)((endDate?.Ticks - beginDate?.Ticks) / MILLIS_PER_DAY / DAYS_PER_YEAR);
         }
     }

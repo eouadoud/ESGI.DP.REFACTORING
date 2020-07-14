@@ -7,7 +7,7 @@ namespace ESGI.DesignPattern.Projet
     public class LoanBuilder
     {
         private double commitment = 1.0;
-        private DateTime start = DateTime.Now;
+        private DateTime start = SystemTime.Now;
         private DateTime? expiry;
         private DateTime? maturity;
         private CapitalStrategy capitalStrategy;
@@ -24,7 +24,8 @@ namespace ESGI.DesignPattern.Projet
                 maturity,
                 riskRating,
                 capitalStrategy,
-                unusedPercentage
+                unusedPercentage,
+                outstanding
             );
         }
 
