@@ -6,19 +6,17 @@ namespace ESGI.DesignPattern.Projet
 
         private const long MILLIS_PER_DAY = 86400000;
         private const long DAYS_PER_YEAR = 365;
-        private const double riskRating = 0.03;
-        private const double unusedRiskRating = 0.01;
-
+        
         public abstract double Capital(Loan loan);
 
         protected double RiskFactorFor()
         {
-            return riskRating;
+            return RiskFactor.riskRating;
         }
 
         protected double UnusedRiskFactorFor()
         {
-            return unusedRiskRating;
+            return UnusedRiskFactors.unusedRiskRating;
         }
 
         public virtual double Duration(Loan loan)
