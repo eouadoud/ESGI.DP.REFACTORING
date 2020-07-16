@@ -5,25 +5,27 @@ namespace ESGI.DesignPattern.Projet
 {
     public class Loan
     {
-        double _commitment = 1.0;
-        private DateTime? _expiry;
-        private DateTime? _maturity;
-        private double _outstanding;
-        IList<Payment> _payments = new List<Payment>();
-        private DateTime? _today = DateTime.Now;
-        private DateTime _start;
-        private double _riskRating;
-        private double _unusedPercentage;
-        private CapitalStrategy _capitalStrategy;
+
+        public readonly DateTime? _expiry;
+        public readonly DateTime? _maturity;
+        public double _commitment { get; }
+        public double _outstanding { get; }
+        public IList<Payment> _payments { get; } = new List<Payment>();
+        public readonly DateTime? _today = DateTime.Now;
+        public readonly DateTime _start;
+        public readonly double _riskRating;
+        public readonly double _unusedPercentage;
+        private readonly CapitalStrategy _capitalStrategy;
 
         internal Loan(double commitment,
+                    double notSureWhatThisIs,
                     DateTime start,
                     DateTime? expiry,
                     DateTime? maturity,
                     int riskRating,
                     CapitalStrategy capitalStrategy,
                     double unusedPercentage,
-                    double _outstanding)
+                    double outstanding)
         {
             this._expiry = expiry;
             this._commitment = commitment;
@@ -34,59 +36,7 @@ namespace ESGI.DesignPattern.Projet
             this._unusedPercentage = 1.0;
             this._capitalStrategy = capitalStrategy;
             this._unusedPercentage = unusedPercentage;
-            this._outstanding = _outstanding;
-        }
-
-        public static Loan NewTermLoan(double commitment, DateTime start, DateTime maturity, int riskRating)
-        {
-            return new LoanBuilder()
-                .WithCommitment(commitment)
-                .WithStartDate(start)
-                .WithExpiryDate(null)
-                .WithMaturityDate(maturity)
-                .WithRiskRating(riskRating)
-                .WithStrategy(new CapitalStrategyTermLoan())
-                .Build();
-        }
-
-        public static Loan NewRevolver(double commitment, DateTime start, DateTime expiry, int riskRating)
-        {
-            return new LoanBuilder()
-                .WithCommitment(commitment)
-                .WithStartDate(start)
-                .WithExpiryDate(expiry)
-                .WithMaturityDate(null)
-                .WithRiskRating(riskRating)
-                .WithStrategy(new CapitalStrategyRevolver())
-                .Build();
-        }
-
-        public static Loan NewAdvisedLine(double commitment, DateTime start, DateTime expiry, int riskRating)
-        {
-            return new LoanBuilder()
-                .WithCommitment(commitment)
-                .WithStartDate(start)
-                .WithExpiryDate(expiry)
-                .WithMaturityDate(null)
-                .WithRiskRating(riskRating)
-                .WithStrategy(new CapitalStrategyAdvisedLine())
-                .WithUnusedPercentage(0.1)
-                .Build();
-        }
-
-        public DateTime? GetExpiry()
-        {
-            return _expiry;
-        }
-
-        public double GetCommitment()
-        {
-            return _commitment;
-        }
-
-        public double GetOutStanding()
-        {
-            return _outstanding;
+            this._outstanding = outstanding;
         }
 
         public void Payment(double amount, DateTime paymentDate)
@@ -94,35 +44,10 @@ namespace ESGI.DesignPattern.Projet
             _payments.Add(new Payment(amount, paymentDate));
         }
 
-
-        public DateTime? GetToday()
-        {
-            return _today;
-        }
-
-        public DateTime? GetStart()
-        {
-            return _start;
-        }
-
-        public IList<Payment> Payments()
-        {
-            return _payments;
-        }
-
-        public double GetUnusedPercentage()
-        {
-            return _unusedPercentage;
-        }
-
         public double UnusedRiskAmount()
         {
             return (_commitment - _outstanding);
         }
 
-        public double OutstandingRiskAmount()
-        {
-            return _outstanding;
-        }
     }
 }
